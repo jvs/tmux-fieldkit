@@ -74,7 +74,8 @@ func runInit(cmd *cobra.Command, args []string) error {
 	dirs := []string{
 		filepath.Join(expanded, "config"),
 		filepath.Join(expanded, "junk"),
-		filepath.Join(expanded, "scratch"),
+		filepath.Join(expanded, "scratch", "stage"),
+		filepath.Join(expanded, "scratch", "trash"),
 		filepath.Join(expanded, "todo"),
 	}
 	for _, d := range dirs {
@@ -99,6 +100,9 @@ func runInit(cmd *cobra.Command, args []string) error {
 	// Git init (no-op if already a repo).
 	if err := kit.Init(expanded); err != nil {
 		return err
+	}
+	if err := kit.EnsureGitignore(expanded, "scratch/"); err != nil {
+		return fmt.Errorf("writing .gitignore: %w", err)
 	}
 	fmt.Printf("Data directory: %s\n", expanded)
 

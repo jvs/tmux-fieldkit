@@ -4,10 +4,31 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 )
+
+// EnsureGitignore appends entry to <dataDir>/.gitignore if not already present.
+func EnsureGitignore(dataDir, entry string) error {
+	path := filepath.Join(dataDir, ".gitignore")
+	data, err := os.ReadFile(path)
+	if err != nil && !os.IsNotExist(err) {
+		return fmt.Errorf("reading .gitignore: %w", err)
+	}
+	for _, line := range strings.Split(string(data), "\n") {
+		if strings.TrimSpace(line) == entry {
+			return nil
+		}
+	}
+	content := string(data)
+	if len(content) > 0 && !strings.HasSuffix(content, "\n") {
+		content += "\n"
+	}
+	content += entry + "\n"
+	return os.WriteFile(path, []byte(content), 0644)
+}
 
 // Init runs "git init" inside dir, creating it if needed.
 func Init(dir string) error {
