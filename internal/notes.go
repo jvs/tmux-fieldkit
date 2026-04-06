@@ -30,6 +30,12 @@ func NotesToggle(cfg Config) error {
 		return err
 	}
 
+	// If a popup is currently showing, close it before switching to a
+	// fullscreen session.
+	if CurrentSession() == cfg.PopupSession {
+		DetachClient()
+	}
+
 	if err := notesMaybeAutoFlush(dataDir, cfg.CommitInterval); err != nil {
 		return err
 	}

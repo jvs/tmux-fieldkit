@@ -34,6 +34,12 @@ func JunkToggle(cfg Config) error {
 		return nil
 	}
 
+	// If a popup is currently showing, close it before switching to a
+	// fullscreen session.
+	if CurrentSession() == cfg.PopupSession {
+		DetachClient()
+	}
+
 	dataDir, err := DataDirPath(cfg.DataDir)
 	if err != nil {
 		return err

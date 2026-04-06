@@ -156,6 +156,8 @@ var newCmd = &cobra.Command{
 			return kit.NotesNew(cfg)
 		case "scratch":
 			return kit.ScratchNew(cfg)
+		case "calc":
+			return kit.CalcNew(cfg)
 		default:
 			return fmt.Errorf("unknown tool %q", args[0])
 		}
@@ -182,6 +184,8 @@ var toggleCmd = &cobra.Command{
 			return kit.JunkToggle(cfg)
 		case "scratch":
 			return kit.ScratchToggle(cfg)
+		case "calc":
+			return kit.CalcToggle(cfg)
 		default:
 			return fmt.Errorf("unknown tool %q", args[0])
 		}

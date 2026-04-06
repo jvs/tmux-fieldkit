@@ -35,8 +35,13 @@ func ScratchNew(cfg Config) error {
 // If the window doesn't exist, run cleanup, then create a new timestamped
 // scratch file in scratch/stage/ and open it in a new popup window.
 func ScratchToggle(cfg Config) error {
-	if CurrentSession() == cfg.PopupSession && CurrentWindow() == scratchWindow {
-		return DetachClient()
+	if CurrentSession() == cfg.PopupSession {
+		if CurrentWindow() == scratchWindow {
+			return DetachClient()
+		}
+		if err := DetachClient(); err != nil {
+			return err
+		}
 	}
 
 	dataDir, err := DataDirPath(cfg.DataDir)
