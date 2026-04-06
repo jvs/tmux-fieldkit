@@ -74,6 +74,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	dirs := []string{
 		filepath.Join(expanded, "config"),
 		filepath.Join(expanded, "junk"),
+		filepath.Join(expanded, "scratch"),
 		filepath.Join(expanded, "todo"),
 	}
 	for _, d := range dirs {
@@ -145,6 +146,8 @@ var newCmd = &cobra.Command{
 		switch args[0] {
 		case "junk":
 			return kit.JunkNew(cfg)
+		case "scratch":
+			return kit.ScratchNew(cfg)
 		default:
 			return fmt.Errorf("unknown tool %q", args[0])
 		}
@@ -167,6 +170,8 @@ var toggleCmd = &cobra.Command{
 			return kit.TodoToggle(cfg)
 		case "junk":
 			return kit.JunkToggle(cfg)
+		case "scratch":
+			return kit.ScratchToggle(cfg)
 		default:
 			return fmt.Errorf("unknown tool %q", args[0])
 		}

@@ -65,7 +65,7 @@ tmux-fieldkit/
       main.go           # CLI entry point
   internal/
     todo.go             # todo open/flush logic
-    pad.go              # scratch pad open/flush logic
+    scratch.go          # scratch pad open/flush logic
     junk.go             # junk drawer open/flush logic
     notes.go            # field notes open/flush logic
     calc/
@@ -95,7 +95,7 @@ kit status            # show per-tool details about what hasn't been flushed yet
                       #   todo: line count in stage.md
                       #   notes: count and names of files in today/
                       #   calc: line count in stage.md
-                      #   pad,junk: n/a (no staging)
+                      #   scratch,junk: n/a (no staging)
 kit install           # alias for init + setup
 kit uninstall         # remove tmux config lines, optionally delete ~/kit
 ```
@@ -118,14 +118,14 @@ kit toggle junk       # switch to junk drawer session, creating it if necessary,
 kit new junk          # kill junk drawer session if it exists, create a new one
 
 # scratch pad
-kit toggle pad        # switch to scratch pad session, creating it if necessary,
+kit toggle scratch    # switch to scratch pad session, creating it if necessary,
                       # or hide it if it's already focused
-kit new pad           # kill scratch pad session if it exists, create a new one
+kit new scratch       # kill scratch pad session if it exists, create a new one
 
 # calculator
 kit toggle calc       # switch to calc session, creating it if necessary,
                       # or hide it if it's already focused
-kit new calc          # kill scratch pad session if it exists, create a new one
+kit new calc          # kill calc session if it exists, create a new one
 ```
 
 ## Example tmux keybindings
@@ -137,13 +137,13 @@ bind -n M-f run-shell "kit toggle notes"
 bind -n M-F run-shell "kit new note"
 bind -n M-d run-shell "kit toggle junk"
 bind -n M-D run-shell "kit new junk"
-bind -n M-s run-shell "kit toggle pad"
-bind -n M-S run-shell "kit new pad"
+bind -n M-s run-shell "kit toggle scratch"
+bind -n M-S run-shell "kit new scratch"
 bind -n M-a run-shell "kit toggle calc"
 bind -n M-a run-shell "kit new calc"
 ```
 
-`kit new pad` may prompt for a file extension or type (e.g. "code", "text", "markdown") and name the file accordingly (`scratch-2024-06-30-001-code.py` vs `scratch-2024-06-30-001-text.txt`).
+`kit new scratch` may prompt for a file extension or type (e.g. "code", "text", "markdown") and name the file accordingly (`scratch-2024-06-30-001-code.py` vs `scratch-2024-06-30-001-text.txt`).
 
 ---
 
@@ -252,8 +252,8 @@ The junk drawer has no staging/flushing cycle. It's just a place to put things.
 
 ### Files
 
-- `~/kit/pad/stage/YYYY-MM-DD-HHMMSS` — current scratch files, one per session, with timestamped names, automatically trashed after 30 days
-- `~/kit/pad/trash/YYYY-MM-DD-HHMMSS` — trashed scratch files, automatically deleted after 60 days
+- `~/kit/scratch/stage/YYYY-MM-DD-HHMMSS` — current scratch files, one per session, with timestamped names, automatically trashed after 30 days
+- `~/kit/scratch/trash/YYYY-MM-DD-HHMMSS` — trashed scratch files, automatically deleted after 60 days
 
 ---
 
