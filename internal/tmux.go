@@ -14,6 +14,19 @@ func SessionExists(name string) bool {
 	return exec.Command("tmux", "has-session", "-t", name).Run() == nil
 }
 
+// EnsureSessionAt creates a detached tmux session rooted at cwd if it doesn't
+// already exist.
+func EnsureSessionAt(name, cwd string) error {
+	if SessionExists(name) {
+		return nil
+	}
+	out, err := exec.Command("tmux", "new-session", "-d", "-s", name, "-c", cwd).CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("creating session %q: %w\n%s", name, err, out)
+	}
+	return nil
+}
+
 // EnsureSession creates a detached tmux session if it doesn't already exist.
 func EnsureSession(name string) error {
 	if SessionExists(name) {
@@ -167,5 +180,3 @@ func RunDirect(shellCmd string) error {
 	c.Stderr = os.Stderr
 	return c.Run()
 }
-
-

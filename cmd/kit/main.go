@@ -24,7 +24,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(initCmd, toggleCmd, cycleCmd, flushCmd)
+	rootCmd.AddCommand(initCmd, toggleCmd, cycleCmd, newCmd, flushCmd)
 }
 
 // prompt prints a label with a default and reads a line from stdin.
@@ -73,6 +73,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 	// Scaffold directories.
 	dirs := []string{
 		filepath.Join(expanded, "config"),
+		filepath.Join(expanded, "junk"),
 		filepath.Join(expanded, "todo"),
 	}
 	for _, d := range dirs {
@@ -130,6 +131,26 @@ var cycleCmd = &cobra.Command{
 	},
 }
 
+// --- kit new ---
+
+var newCmd = &cobra.Command{
+	Use:   "new <tool>",
+	Short: "Kill a tool's session and create a fresh one",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cfg, err := kit.Load()
+		if err != nil {
+			return err
+		}
+		switch args[0] {
+		case "junk":
+			return kit.JunkNew(cfg)
+		default:
+			return fmt.Errorf("unknown tool %q", args[0])
+		}
+	},
+}
+
 // --- kit toggle ---
 
 var toggleCmd = &cobra.Command{
@@ -144,6 +165,8 @@ var toggleCmd = &cobra.Command{
 		switch args[0] {
 		case "todo":
 			return kit.TodoToggle(cfg)
+		case "junk":
+			return kit.JunkToggle(cfg)
 		default:
 			return fmt.Errorf("unknown tool %q", args[0])
 		}
