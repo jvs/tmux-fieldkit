@@ -208,7 +208,7 @@ When opening a todo popup, check the mtime of `stage.md`. If it's older than **2
 ### Behavior
 
 - Always opens in a **fullscreen tmux session** named `field notes`.
-- `kit togle notes` — hide the `field notes` session if it's visible. Otherwsie, open the most recent file in `today/` for the current date, or create a new one if none exists.
+- `kit toggle notes` — hide the `field notes` session if it's visible. Otherwsie, open the most recent file in `today/` for the current date, or create a new one if none exists.
 - `kit new note` — create a new timestamped file in `today/` and open it, even if another session is already open.
 - `kit flush notes` — process all files in `today/`:
   1. Parse each file for markdown `# Heading` lines.

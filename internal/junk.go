@@ -7,21 +7,14 @@ import (
 	"path/filepath"
 )
 
-const (
-	junkSession = "junk drawer"
-
-	// Commands for session navigation. To be made configurable.
-	junkRecordVisitCmd = "tmux-hometown record-visit"
-	junkPrevSessionCmd = "tmux-hometown previous-session"
-	junkKillSessionCmd = "tmux-hometown kill-session -y"
-)
+const junkSession = "junk drawer"
 
 // JunkNew kills the junk drawer session if it exists and creates a fresh one.
 // If currently in the junk drawer, uses tmux-hometown to switch away before
 // killing. Otherwise kills it directly with tmux.
 func JunkNew(cfg Config) error {
 	if CurrentSession() == junkSession {
-		if err := runCmd(junkKillSessionCmd); err != nil {
+		if err := runCmd(fullscreenKillSession); err != nil {
 			return err
 		}
 	} else if SessionExists(junkSession) {
@@ -35,7 +28,7 @@ func JunkNew(cfg Config) error {
 // The session opens the editor on the junk directory.
 func JunkToggle(cfg Config) error {
 	if CurrentSession() == junkSession {
-		if err := runCmd(junkPrevSessionCmd); err != nil {
+		if err := runCmd(fullscreenPrevSession); err != nil {
 			exec.Command("tmux", "switch-client", "-l").Run()
 		}
 		return nil
@@ -51,7 +44,7 @@ func JunkToggle(cfg Config) error {
 		if err := os.MkdirAll(junkDir, 0755); err != nil {
 			return fmt.Errorf("creating junk dir: %w", err)
 		}
-		editorCmd := fmt.Sprintf("%s .; %s", cfg.Editor, junkKillSessionCmd)
+		editorCmd := fmt.Sprintf("%s .; %s", cfg.Editor, fullscreenKillSession)
 		if err := NewSessionWithWindow(junkSession, "junk", junkDir, editorCmd); err != nil {
 			return err
 		}
@@ -60,7 +53,7 @@ func JunkToggle(cfg Config) error {
 	if err := SwitchClient(junkSession); err != nil {
 		return err
 	}
-	runCmd(junkRecordVisitCmd) // best-effort
+	runCmd(fullscreenRecordVisit) // best-effort
 	return nil
 }
 

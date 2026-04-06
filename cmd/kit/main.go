@@ -74,6 +74,8 @@ func runInit(cmd *cobra.Command, args []string) error {
 	dirs := []string{
 		filepath.Join(expanded, "config"),
 		filepath.Join(expanded, "junk"),
+		filepath.Join(expanded, "notes", "today"),
+		filepath.Join(expanded, "notes", "topics"),
 		filepath.Join(expanded, "scratch", "stage"),
 		filepath.Join(expanded, "scratch", "trash"),
 		filepath.Join(expanded, "todo"),
@@ -150,6 +152,8 @@ var newCmd = &cobra.Command{
 		switch args[0] {
 		case "junk":
 			return kit.JunkNew(cfg)
+		case "note":
+			return kit.NotesNew(cfg)
 		case "scratch":
 			return kit.ScratchNew(cfg)
 		default:
@@ -172,6 +176,8 @@ var toggleCmd = &cobra.Command{
 		switch args[0] {
 		case "todo":
 			return kit.TodoToggle(cfg)
+		case "notes":
+			return kit.NotesToggle(cfg)
 		case "junk":
 			return kit.JunkToggle(cfg)
 		case "scratch":
